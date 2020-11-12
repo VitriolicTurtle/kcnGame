@@ -21,7 +21,7 @@ AcasterCharacterBP::AcasterCharacterBP()
 	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
 	CameraComp->SetupAttachment(SpringArmComp);
 
-	MeshComp = CreateAbstractDefaultSubobject<UStaticMeshComponent>(TEXT("PlayerMesh"));
+	MeshComp = CreateAbstractDefaultSubobject<USkeletalMeshComponent>(TEXT("PlayerMesh"));
 	MeshComp->SetupAttachment(RootComponent);
 
 	BaseTurnRate = 45.0f;
