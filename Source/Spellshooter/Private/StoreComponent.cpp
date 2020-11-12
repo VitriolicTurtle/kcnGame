@@ -33,12 +33,22 @@ void UStoreComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	// ...
 }
 
-//	DOESNT WORK YET!
-bool UStoreComponent::EquipItem(USpellshooterItem* Item)
+bool UStoreComponent::getItemFromStore(USpellshooterItem* Item){
+	
+	OnItemAdded.Broadcast(GetOwner(), this, Item);
+	return true;
+}
+
+bool UStoreComponent::removeItemFromPlayer(USpellshooterItem* Item)
 {
-	auto* Owner = GetOwner();
-	UWorld* World = GetWorld();
-	//auto* relevantPlayerCharacter = Cast<AHumanCharacter>(Cast<APlayerController>(Owner)->GetCharacter());
-	//relevantPlayerCharacter->ServerGiveAbilityFromItem(Item);
-	return false;
+	OnItemRemoved.Broadcast(GetOwner(), this, Item);
+	return true;
+}
+
+void UStoreComponent::getStoreList(TArray<USpellshooterItem*>& SendStoreItems){
+
+	for (const auto& item : storeItems) {
+		SendStoreItems.Add(item);
+	}
+
 }

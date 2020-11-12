@@ -8,6 +8,7 @@
 #include "Components/InputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Controller.h"
+#include "../Public/SpellshooterItemWeapon.h"
 #include "GameFramework/SpringArmComponent.h"
 
 
@@ -36,26 +37,6 @@ AHumanCharacter::AHumanCharacter()
 	GetCharacterMovement()->AirControl = 0.2f;
 
 	bUseControllerRotationYaw = true;
-
-
-	//FVector SocketLocationR = GetMesh()->GetSocketLocation("WeaponAttack");
-	//SpellshooterWeapons* Weapon = GetWorld()->SpawnActor<AMyWeaponActor>(WeaponClassSlot1, SocketLocationR, SocketRotationR);
-
-	
-	FActorSpawnParameters sParams;
-	sParams.bNoFail = true;
-	sParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	
-	FTransform weaponTransform;
-	weaponTransform.SetLocation(FVector::ZeroVector);
-	weaponTransform.SetRotation(FQuat(FRotator::ZeroRotator));
-
-	//myWeapon = GetWorld()->SpawnActor<ASpellshooterWeapons>(weaponClass, sParams);
-	//wpn->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, FName("WeaponAttack"));
-
-	skMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("AK"));
-	skMesh->CastShadow = true;
-	skMesh->SetupAttachment(RootComponent);
 
 }
 
@@ -95,16 +76,6 @@ void AHumanCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInp
 void AHumanCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	//skMesh->AttachTo(GetMesh(), TEXT("WeaponAttach"), EAttachLocation::SnapToTargetIncludingScale, true);
-	
-	skMesh->AttachToComponent(GetMesh(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true), TEXT("WeaponAttach"));
-
-
-	if (GEngine)
-	{
-		// Put up a debug message for five seconds. The -1 "Key" value (first argument) indicates that we will never need to update or refresh this message.
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using human.12"));
-	}
 }
 
 void AHumanCharacter::OnResetVR()
