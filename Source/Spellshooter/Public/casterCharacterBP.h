@@ -26,8 +26,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera")
 		UCameraComponent* CameraComp;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Player")   //might be obsolete
-		UStaticMeshComponent* MeshComp;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player")   //might be obsolete
+		USkeletalMeshComponent* MeshComp;
 
 protected:
 	// Called when the game starts or when spawned

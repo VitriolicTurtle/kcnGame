@@ -13,7 +13,7 @@ class AHumanCharacter : public ACharacter
 	GENERATED_BODY()
 
 		/** Camera boom positioning the camera behind the character */
-		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+		UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
 		class USpringArmComponent* CameraBoom;
 
 		/** Follow camera */
@@ -22,22 +22,18 @@ class AHumanCharacter : public ACharacter
 public:
 	AHumanCharacter();
 
+	UPROPERTY(BlueprintReadWrite, Category = "Shop")
+	AActor* playerWeapon = nullptr;
+
 	/** Base turn rate, in deg/sec. Other scaling may affect final turn rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 		float BaseTurnRate;
 
 	/** Base look up/down rate, in deg/sec. Other scaling may affect final rate. */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 		float BaseLookUpRate;
 
 
-	UPROPERTY(VisibleDefaultsOnly, Category = "wpn") // This is so we can set the mesh in the editor
-		USkeletalMeshComponent* skMesh;
-
-	class AActor* myWeapon = nullptr;
-
-	//UFUNCTION(Server, Reliable, BlueprintCallable, Category = Abilities)
-	//	void ServerGiveAbilityFromItem(class USpellshooterItem* Item);
 	
 protected:
 	void BeginPlay();

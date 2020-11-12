@@ -9,7 +9,8 @@
 
 class UStoreComponent;
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FItemPurchase, AActor*, Owner, UStoreComponent*, Store, USpellshooterItem*, Item);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FItemAdded, AActor*, Owner, UStoreComponent*, Store, USpellshooterItem*, Item);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FItemRemoved, AActor*, Owner, UStoreComponent*, Store, USpellshooterItem*, Item);
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -18,24 +19,36 @@ class SPELLSHOOTER_API UStoreComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
 	UStoreComponent();
 
 protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Store")
+		TArray<class USpellshooterItem*> storeItems{};
+
+
 public:	
-	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	/*
-	*	Item purchasing and equipping
-	*/
-	UPROPERTY(BlueprintAssignable, Category = Inventory)
-		FItemPurchase OnItemPurchased{};
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Store")
+		int32 weaponAmount = 0;
+
+	UPROPERTY(BlueprintAssignable, Category = "Store")
+		FItemAdded OnItemAdded {};
+
+	UPROPERTY(BlueprintAssignable, Category = "Store")
+		FItemRemoved OnItemRemoved {};
 	
 	UFUNCTION(BlueprintCallable, Category = "Store")
-		bool EquipItem(USpellshooterItem* Item);
+		bool getItemFromStore(USpellshooterItem* Item);
+
+	UFUNCTION(BlueprintCallable, Category = "Store")
+		bool removeItemFromPlayer(USpellshooterItem* Item);
+
+	UFUNCTION(BlueprintCallable, Category = "Store")
+		void getStoreList(TArray<USpellshooterItem*>& SendStoreItems);
 
 };
