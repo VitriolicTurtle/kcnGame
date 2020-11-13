@@ -24,12 +24,12 @@ AHumanCharacter::AHumanCharacter()
 	// set our turn rates for input
 	BaseTurnRate = 45.f;
 	BaseLookUpRate = 45.f;
-	
+	/*
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("sFollowCamera"));
 	FollowCamera->AttachTo(GetMesh(), "CamAttach");
 	FollowCamera->SetRelativeRotation(FRotator(90.0f, 0.0f, 250.0f));
 	FollowCamera->bUsePawnControlRotation = false; // Rotate the arm based on the controller
-
+	*/
 	// Configure character movement
 	GetCharacterMovement()->bOrientRotationToMovement = true;			 // Character moves in the direction of input...	
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 540.0f, 540.0f); // ...at this rotation rate
