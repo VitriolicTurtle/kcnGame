@@ -10,6 +10,11 @@
 #include "GameFramework/Controller.h"
 #include "../Public/SpellshooterItemWeapon.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "bullet.h"
+#include "Net/UnrealNetwork.h"
+#include "Engine/Engine.h"
+#include "Components/StaticMeshComponent.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -68,6 +73,9 @@ void AHumanCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInp
 
 	// VR headset functionality
 	PlayerInputComponent->BindAction("ResetVR", IE_Pressed, this, &AHumanCharacter::OnResetVR);
+
+	// Shoot
+	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &AHumanCharacter::shoot);
 }
 
 
@@ -76,6 +84,9 @@ void AHumanCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInp
 void AHumanCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	maxPlayerHP = 100.0f;
+	currentPlayerHP = maxPlayerHP;
+	playerHPpercent = 1.0f;
 }
 
 void AHumanCharacter::OnResetVR()
@@ -132,4 +143,82 @@ void AHumanCharacter::MoveRight(float Value)
 		// add movement in that direction
 		AddMovementInput(Direction, Value);
 	}
+}
+
+float AHumanCharacter::getPlayerHP() {
+	return playerHPpercent;
+}
+
+
+void AHumanCharacter::updatePlayerHP(float HP) {
+	currentPlayerHP += HP;
+	currentPlayerHP = FMath::Clamp(currentPlayerHP, 0.0f, maxPlayerHP);
+	tempPlayerHP = playerHPpercent;
+	playerHPpercent = currentPlayerHP / maxPlayerHP;
+	UE_LOG(LogTemp, Warning, TEXT("hp should update"));
+}
+
+void AHumanCharacter::playerTakeDamage(float damage) {
+	updatePlayerHP(-damage);
+}
+
+void AHumanCharacter::onRep_currentPlayerHP() {
+	updatePlayerHP(0);
+}
+
+void AHumanCharacter::serverOnShoot_Implementation() {
+	shoot();
+}
+
+void AHumanCharacter::shoot() {
+	if (!HasAuthority()) {
+		serverOnShoot();
+	}
+	else {
+		// Get the camera transform.
+		FVector CameraLocation;
+		FRotator CameraRotation;
+		GetActorEyesViewPoint(CameraLocation, CameraRotation);
+
+		// Set MuzzleOffset to spawn projectiles slightly in front of the camera.
+		MuzzleOffset.Set(100.0f, 60.0f, -40.0f);
+
+		// Transform MuzzleOffset from camera space to world space.
+		FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
+
+		// Skew the aim to be slightly upwards.
+		FRotator MuzzleRotation = CameraRotation;
+		MuzzleRotation.Pitch += 2.0f;
+
+		UWorld* World = GetWorld();
+
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+		SpawnParams.Instigator = GetInstigator();
+
+		Abullet* bullet = World->SpawnActor<Abullet>(BPbullet, MuzzleLocation, MuzzleRotation, SpawnParams);
+
+		if (bullet) {
+			FVector LaunchDirection = MuzzleRotation.Vector();
+			bullet->FireInDirection(LaunchDirection);
+		}
+	}
+}
+
+void AHumanCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(AHumanCharacter, killer);
+	DOREPLIFETIME(AHumanCharacter, currentPlayerHP);
+}
+
+void AHumanCharacter::onRep_kill() {
+	if (IsLocallyControlled()) {
+		displayDeathScreen();
+	}
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetMesh()->SetSimulatePhysics(true);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	GetMesh()->SetCollisionResponseToAllChannels(ECR_Block);
+	SetLifeSpan(05.0f);
 }

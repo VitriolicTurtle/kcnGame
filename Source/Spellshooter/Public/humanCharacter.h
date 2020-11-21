@@ -33,7 +33,47 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 		float BaseLookUpRate;
 
+	UPROPERTY(EditAnywhere, Category = "shooting")
+		TSubclassOf<class Abullet> BPbullet;
 
+	// Player health
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "health")
+		float maxPlayerHP;
+
+	UPROPERTY(ReplicatedUsing = onRep_currentPlayerHP, EditAnywhere, BlueprintReadWrite, Category = "health") //-------->
+		float currentPlayerHP;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "health")
+		float tempPlayerHP;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "health")
+		float playerHPpercent;
+
+	UFUNCTION(BlueprintPure, Category = "health")
+		float getPlayerHP();
+
+	UFUNCTION(BlueprintCallable, Category = "health")
+		void updatePlayerHP(float HP);
+
+
+	UFUNCTION(BlueprintCallable, Category = "health")
+		void playerTakeDamage(float damage);
+
+	// Gun muzzle offset from the camera location.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+		FVector MuzzleOffset;
+
+	UPROPERTY(ReplicatedUsing = onRep_Kill, BlueprintReadOnly, Category = Gameplay)
+		AHumanCharacter* killer;
+
+	UFUNCTION()
+		void onRep_kill();
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void displayDeathScreen();
+
+	UFUNCTION()
+		void onRep_currentPlayerHP();
 	
 protected:
 	void BeginPlay();
@@ -63,6 +103,13 @@ protected:
 
 	/** Handler for when a touch input stops. */
 	void TouchStopped(ETouchIndex::Type FingerIndex, FVector Location);
+
+	void shoot();
+
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	UFUNCTION(Server, Reliable)//, WithValidation)
+	void serverOnShoot();
 
 protected:
 	/** Equipped Items */
