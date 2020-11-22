@@ -15,6 +15,7 @@
 #include "Engine/Engine.h"
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "playerHUD.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -42,6 +43,8 @@ AHumanCharacter::AHumanCharacter()
 	GetCharacterMovement()->AirControl = 0.2f;
 
 	bUseControllerRotationYaw = true;
+
+	//CameraBoom->bUsePawnControlRotation = true; // Rotate the arm based on the controller
 
 }
 
@@ -181,14 +184,14 @@ void AHumanCharacter::shoot() {
 		GetActorEyesViewPoint(CameraLocation, CameraRotation);
 
 		// Set MuzzleOffset to spawn projectiles slightly in front of the camera.
-		MuzzleOffset.Set(100.0f, 60.0f, -40.0f);
+		MuzzleOffset.Set(50.0f, 0.0f, 0.0f);
 
 		// Transform MuzzleOffset from camera space to world space.
 		FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
 
 		// Skew the aim to be slightly upwards.
 		FRotator MuzzleRotation = CameraRotation;
-		MuzzleRotation.Pitch += 2.0f;
+		MuzzleRotation.Pitch += 0.0f;
 
 		UWorld* World = GetWorld();
 

@@ -6,6 +6,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "humanCharacter.h"
 #include "ffaGameMode.h"
+#include "playerHUD.h"
 
 // Sets default values
 Abullet::Abullet()
