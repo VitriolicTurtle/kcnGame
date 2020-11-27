@@ -3,6 +3,7 @@
 
 #include "ffaGameMode.h"
 #include "ffaPlayerController.h"
+#include "SpellshooterPlayerController.h"
 #include "ffaPlayerState.h"
 #include "ffaGameState.h"
 #include "humanCharacter.h"
@@ -15,13 +16,13 @@ void AffaGameMode::PostLogin(APlayerController* newPlayer)
 {
 	Super::PostLogin(newPlayer);
 
-	playersAlive.Add(Cast<AffaPlayerController>(newPlayer));
+	playersAlive.Add(Cast<ASpellshooterPlayerController>(newPlayer));
 }
 
 void AffaGameMode::playerKilled(class AHumanCharacter* killed, class AHumanCharacter* killer) {
 
 	if (killed) {
-		if (AffaPlayerController* player = Cast<AffaPlayerController>(killed->GetController())) {
+		if (ASpellshooterPlayerController* player = Cast<ASpellshooterPlayerController>(killed->GetController())) {
 			playersAlive.RemoveSingle(player);
 		}
 		if (playersAlive.Num() == 1 && playersAlive.IsValidIndex(0)) {

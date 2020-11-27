@@ -22,5 +22,5 @@ public:
 	void winPlayer(class AffaPlayerState* winner);
 
 	UPROPERTY(Transient)
-		TArray<class AffaPlayerController*> playersAlive;
+		TArray<class ASpellshooterPlayerController*> playersAlive;
 };
