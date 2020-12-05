@@ -7,6 +7,7 @@
 //#include "AbilitySystemInterface.h"
 #include "HumanCharacter.generated.h"
 
+
 UCLASS(config = Game)
 class AHumanCharacter : public ACharacter
 {

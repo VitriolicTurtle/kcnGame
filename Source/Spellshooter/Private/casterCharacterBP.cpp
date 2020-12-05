@@ -7,7 +7,12 @@
 #include "GameFramework/Controller.h"
 #include "Components/InputComponent.h"
 #include "Components/StaticMeshComponent.h"
-
+#include "Components/CapsuleComponent.h"
+#include "bullet.h"
+#include "Net/UnrealNetwork.h"
+#include "Engine/Engine.h"
+#include "GameFramework/ProjectileMovementComponent.h"
+#include "playerHUD.h"
 
 // Sets default values
 AcasterCharacterBP::AcasterCharacterBP()
@@ -32,6 +37,9 @@ AcasterCharacterBP::AcasterCharacterBP()
 void AcasterCharacterBP::BeginPlay()
 {
 	Super::BeginPlay();
+	maxPlayerHP = 100.0f;
+	currentPlayerHP = maxPlayerHP;
+	playerHPpercent = 1.0f;
 	
 }
 
@@ -95,3 +103,41 @@ void AcasterCharacterBP::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 }
 
+float AcasterCharacterBP::getPlayerHP() {
+	return playerHPpercent;
+}
+
+
+void AcasterCharacterBP::updatePlayerHP(float HP) {
+	currentPlayerHP += HP;
+	currentPlayerHP = FMath::Clamp(currentPlayerHP, 0.0f, maxPlayerHP);
+	tempPlayerHP = playerHPpercent;
+	playerHPpercent = currentPlayerHP / maxPlayerHP;
+	UE_LOG(LogTemp, Warning, TEXT("hp should update Alien"));
+}
+
+void AcasterCharacterBP::playerTakeDamage(float damage) {
+	updatePlayerHP(-damage);
+}
+
+void AcasterCharacterBP::onRep_currentPlayerHP() {
+	updatePlayerHP(0);
+}
+
+void AcasterCharacterBP::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(AcasterCharacterBP, killer);
+	DOREPLIFETIME(AcasterCharacterBP, currentPlayerHP);
+}
+
+void AcasterCharacterBP::onRep_kill() {
+	if (IsLocallyControlled()) {
+		displayDeathScreen();
+	}
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetMesh()->SetSimulatePhysics(true);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	GetMesh()->SetCollisionResponseToAllChannels(ECR_Block);
+	SetLifeSpan(05.0f);
+}

@@ -5,6 +5,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "humanCharacter.h"
+#include "casterCharacterBP.h"
 #include "ffaGameMode.h"
 #include "playerHUD.h"
 
@@ -54,11 +55,24 @@ void Abullet::onHit(UPrimitiveComponent* hitComp, AActor* otherActor, UPrimitive
 				if (AffaGameMode* mode = Cast<AffaGameMode>(GetWorld()->GetAuthGameMode())) {
 					UE_LOG(LogTemp, Warning, TEXT("you are dead"));
 					AHumanCharacter* killer = Cast<AHumanCharacter>(GetOwner());
-					mode->playerKilled(playerHit, killer);
+					mode->playerKilled(playerHit, killer, nullptr, nullptr);
 					playerHit->killer = killer;
 					playerHit->onRep_kill();
 				}
 			}
 		}
+		/*else if (AcasterCharacterBP* playerHit2 = Cast<AcasterCharacterBP>(otherActor)) {
+			playerHit2->playerTakeDamage(25.0f);
+			if (playerHit2->currentPlayerHP <= 0.0f) {
+				if (AffaGameMode* mode2 = Cast<AffaGameMode>(GetWorld()->GetAuthGameMode())) {
+					UE_LOG(LogTemp, Warning, TEXT("you are dead"));
+					if (AcasterCharacterBP* killer2 = Cast<AcasterCharacterBP>(GetOwner())) {
+						mode2->playerKilled(nullptr, nullptr, playerHit2, killer2);
+						playerHit2->killer = killer2;
+						playerHit2->onRep_kill();
+					}
+				}
+			}
+		}*/
 	}
 }

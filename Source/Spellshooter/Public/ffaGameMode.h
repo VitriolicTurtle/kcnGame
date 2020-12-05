@@ -18,9 +18,9 @@ public:
 	AffaGameMode();
 	virtual void PostLogin(APlayerController* newPlayer) override;
 
-	void playerKilled(class AHumanCharacter* killed, class AHumanCharacter* killer);
+	void playerKilled(class AHumanCharacter* killed, class AHumanCharacter* killer, class AcasterCharacterBP* alienKilled, class AcasterCharacterBP* alienKiller);
 	void winPlayer(class AffaPlayerState* winner);
 
 	UPROPERTY(Transient)
-		TArray<class ASpellshooterPlayerController*> playersAlive;
+		TArray<class AffaPlayerController*> playersAlive;
 };

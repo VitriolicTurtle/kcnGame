@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "casterCharacterBP.generated.h"
 
+
 class USpringArmComponent;
 class UCameraComponent;
 class UStaticMeshComponent; //might be obsolete
@@ -29,6 +30,41 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Player")   //might be obsolete
 		USkeletalMeshComponent* MeshComp;
 
+	// Player health
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "health")
+		float maxPlayerHP;
+
+	UPROPERTY(ReplicatedUsing = onRep_currentPlayerHP, EditAnywhere, BlueprintReadWrite, Category = "health") //-------->
+		float currentPlayerHP;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "health")
+		float tempPlayerHP;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "health")
+		float playerHPpercent;
+
+	UFUNCTION(BlueprintPure, Category = "health")
+		float getPlayerHP();
+
+	UFUNCTION(BlueprintCallable, Category = "health")
+		void updatePlayerHP(float HP);
+
+
+	UFUNCTION(BlueprintCallable, Category = "health")
+		void playerTakeDamage(float damage);
+
+	UPROPERTY(ReplicatedUsing = onRep_Kill, BlueprintReadOnly, Category = Gameplay)//---------
+		AcasterCharacterBP* killer;
+
+	UFUNCTION()
+		void onRep_kill();
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void displayDeathScreen();
+
+	UFUNCTION()
+		void onRep_currentPlayerHP();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -44,6 +80,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 		float BaseLookUpAtRate;
 		
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:	
 	

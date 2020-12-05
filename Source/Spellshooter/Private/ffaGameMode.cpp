@@ -7,6 +7,7 @@
 #include "ffaPlayerState.h"
 #include "ffaGameState.h"
 #include "humanCharacter.h"
+#include "casterCharacterBP.h"
 
 AffaGameMode::AffaGameMode()
 	: Super() {
@@ -16,19 +17,27 @@ void AffaGameMode::PostLogin(APlayerController* newPlayer)
 {
 	Super::PostLogin(newPlayer);
 
-	playersAlive.Add(Cast<ASpellshooterPlayerController>(newPlayer));
+	playersAlive.Add(Cast<AffaPlayerController>(newPlayer));
 }
 
-void AffaGameMode::playerKilled(class AHumanCharacter* killed, class AHumanCharacter* killer) {
+void AffaGameMode::playerKilled(class AHumanCharacter* killed, class AHumanCharacter* killer, class AcasterCharacterBP* alienKilled, class AcasterCharacterBP* alienKiller) {
 
-	if (killed) {
-		if (ASpellshooterPlayerController* player = Cast<ASpellshooterPlayerController>(killed->GetController())) {
+	if (killed) {//&& killed != nullptr) {
+		if (AffaPlayerController* player = Cast<AffaPlayerController>(killed->GetController())) {
 			playersAlive.RemoveSingle(player);
 		}
 		if (playersAlive.Num() == 1 && playersAlive.IsValidIndex(0)) {
 			winPlayer(Cast<AffaPlayerState>(playersAlive[0]->PlayerState));
 		}
 	}
+	/*else if (alienKilled && alienKilled != nullptr) {
+		if (AffaPlayerController* player = Cast<AffaPlayerController>(killed->GetController())) {
+			playersAlive.RemoveSingle(player);
+		}
+		if (playersAlive.Num() == 1 && playersAlive.IsValidIndex(0)) {
+			winPlayer(Cast<AffaPlayerState>(playersAlive[0]->PlayerState));
+		}
+	}*/
 }
 
 void AffaGameMode::winPlayer(class AffaPlayerState* winner)
