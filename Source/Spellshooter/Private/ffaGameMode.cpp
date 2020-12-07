@@ -17,13 +17,16 @@ void AffaGameMode::PostLogin(APlayerController* newPlayer)
 {
 	Super::PostLogin(newPlayer);
 
-	playersAlive.Add(Cast<AffaPlayerController>(newPlayer));
+	//playersAlive.Add(Cast<AffaPlayerController>(newPlayer));
+	playersAlive.Add(Cast<ASpellshooterPlayerController>(newPlayer));
 }
 
 void AffaGameMode::playerKilled(class AHumanCharacter* killed, class AHumanCharacter* killer, class AcasterCharacterBP* alienKilled, class AcasterCharacterBP* alienKiller) {
 
 	if (killed) {//&& killed != nullptr) {
-		if (AffaPlayerController* player = Cast<AffaPlayerController>(killed->GetController())) {
+		//if (AffaPlayerController* player = Cast<AffaPlayerController>(killed->GetController())) {
+		if (ASpellshooterPlayerController* player = Cast<ASpellshooterPlayerController>(killed->GetController())) {
+
 			playersAlive.RemoveSingle(player);
 		}
 		if (playersAlive.Num() == 1 && playersAlive.IsValidIndex(0)) {

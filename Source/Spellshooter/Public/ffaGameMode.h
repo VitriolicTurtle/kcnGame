@@ -21,6 +21,11 @@ public:
 	void playerKilled(class AHumanCharacter* killed, class AHumanCharacter* killer, class AcasterCharacterBP* alienKilled, class AcasterCharacterBP* alienKiller);
 	void winPlayer(class AffaPlayerState* winner);
 
+	/*
 	UPROPERTY(Transient)
-		TArray<class AffaPlayerController*> playersAlive;
+
+		TArray<class AffaPlayerController*> playersAlive; */
+
+	UPROPERTY(Transient)
+		TArray<class ASpellshooterPlayerController*> playersAlive;
 };
