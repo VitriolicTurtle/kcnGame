@@ -34,7 +34,6 @@ void UStoreComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 }
 
 bool UStoreComponent::getItemFromStore(USpellshooterItem* Item){
-	
 	OnItemAdded.Broadcast(GetOwner(), this, Item);
 	return true;
 }
