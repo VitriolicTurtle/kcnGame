@@ -158,7 +158,7 @@ void AHumanCharacter::updatePlayerHP(float HP) {
 	currentPlayerHP = FMath::Clamp(currentPlayerHP, 0.0f, maxPlayerHP);
 	tempPlayerHP = playerHPpercent;
 	playerHPpercent = currentPlayerHP / maxPlayerHP;
-	UE_LOG(LogTemp, Warning, TEXT("hp should update"));
+	UE_LOG(LogTemp, Warning, TEXT("hp should update, %f"), playerHPpercent);
 }
 
 void AHumanCharacter::playerTakeDamage(float damage) {
