@@ -40,7 +40,7 @@ void AcasterCharacterBP::BeginPlay()
 	maxPlayerHP = 100.0f;
 	currentPlayerHP = maxPlayerHP;
 	playerHPpercent = 1.0f;
-	
+	playerIsDead = false;	
 }
 
 void AcasterCharacterBP::MoveForward(float Value)
@@ -113,6 +113,9 @@ void AcasterCharacterBP::updatePlayerHP(float HP) {
 	currentPlayerHP = FMath::Clamp(currentPlayerHP, 0.0f, maxPlayerHP);
 	tempPlayerHP = playerHPpercent;
 	playerHPpercent = currentPlayerHP / maxPlayerHP;
+	if (playerHPpercent <= 0) {
+		playerIsDead = true;
+	}
 	UE_LOG(LogTemp, Warning, TEXT("hp should update Alien"));
 }
 
@@ -127,6 +130,7 @@ void AcasterCharacterBP::onRep_currentPlayerHP() {
 void AcasterCharacterBP::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(AcasterCharacterBP, killer);
+	DOREPLIFETIME(AcasterCharacterBP, winnerPl);
 	DOREPLIFETIME(AcasterCharacterBP, currentPlayerHP);
 }
 
@@ -140,4 +144,10 @@ void AcasterCharacterBP::onRep_kill() {
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 	GetMesh()->SetCollisionResponseToAllChannels(ECR_Block);
 	SetLifeSpan(05.0f);
+}
+
+void AcasterCharacterBP::onRep_win() {
+	if (IsLocallyControlled() && playerIsDead == false) {
+		displayVictoryScreen();
+	}
 }

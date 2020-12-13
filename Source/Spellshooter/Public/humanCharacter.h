@@ -38,6 +38,7 @@ public:
 		TSubclassOf<class Abullet> BPbullet;
 
 	// Player health
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "health")
 		float maxPlayerHP;
 
@@ -49,6 +50,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "health")
 		float playerHPpercent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "health")
+	bool playerIsDead;
 
 	UFUNCTION(BlueprintPure, Category = "health")
 		float getPlayerHP();
@@ -67,14 +71,23 @@ public:
 	UPROPERTY(ReplicatedUsing = onRep_Kill, BlueprintReadOnly, Category = Gameplay)
 		AHumanCharacter* killer;
 
+	UPROPERTY(ReplicatedUsing = onRep_Win, BlueprintReadOnly, Category = Gameplay)
+		AHumanCharacter* winnerPl;
+
 	UFUNCTION()
 		void onRep_kill();
+
+	UFUNCTION()
+		void onRep_win();
 
 	UFUNCTION(BlueprintImplementableEvent)
 		void displayDeathScreen();
 
 	UFUNCTION()
 		void onRep_currentPlayerHP();
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void displayVictoryScreen();
 	
 protected:
 	void BeginPlay();

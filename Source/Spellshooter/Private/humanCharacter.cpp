@@ -90,6 +90,7 @@ void AHumanCharacter::BeginPlay()
 	maxPlayerHP = 100.0f;
 	currentPlayerHP = maxPlayerHP;
 	playerHPpercent = 1.0f;
+	playerIsDead = false;
 }
 
 void AHumanCharacter::OnResetVR()
@@ -158,6 +159,9 @@ void AHumanCharacter::updatePlayerHP(float HP) {
 	currentPlayerHP = FMath::Clamp(currentPlayerHP, 0.0f, maxPlayerHP);
 	tempPlayerHP = playerHPpercent;
 	playerHPpercent = currentPlayerHP / maxPlayerHP;
+	if (playerHPpercent <= 0) { 
+		playerIsDead = true; 
+	}
 	UE_LOG(LogTemp, Warning, TEXT("hp should update, %f"), playerHPpercent);
 }
 
@@ -184,7 +188,7 @@ void AHumanCharacter::shoot() {
 		GetActorEyesViewPoint(CameraLocation, CameraRotation);
 
 		// Set MuzzleOffset to spawn projectiles slightly in front of the camera.
-		MuzzleOffset.Set(50.0f, 0.0f, 0.0f);
+		MuzzleOffset.Set(80.0f, 0.0f, 0.0f);
 
 		// Transform MuzzleOffset from camera space to world space.
 		FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
@@ -211,6 +215,7 @@ void AHumanCharacter::shoot() {
 void AHumanCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	DOREPLIFETIME(AHumanCharacter, killer);
+	DOREPLIFETIME(AHumanCharacter, winnerPl);
 	DOREPLIFETIME(AHumanCharacter, currentPlayerHP);
 }
 
@@ -224,4 +229,10 @@ void AHumanCharacter::onRep_kill() {
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 	GetMesh()->SetCollisionResponseToAllChannels(ECR_Block);
 	SetLifeSpan(05.0f);
+}
+
+void AHumanCharacter::onRep_win() {
+	if (IsLocallyControlled() && playerIsDead == false) {
+		displayVictoryScreen();
+	}
 }

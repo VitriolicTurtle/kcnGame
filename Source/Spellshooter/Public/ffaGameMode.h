@@ -21,6 +21,7 @@ public:
 	void playerKilled(class AHumanCharacter* killed, class AHumanCharacter* killer, class AcasterCharacterBP* alienKilled, class AcasterCharacterBP* alienKiller);
 	void winPlayer(class AffaPlayerState* winner);
 
+
 	/*
 	UPROPERTY(Transient)
 
@@ -28,4 +29,15 @@ public:
 
 	UPROPERTY(Transient)
 		TArray<class ASpellshooterPlayerController*> playersAlive;
+
+	UPROPERTY(ReplicatedUsing = onRep_UpdateArr, BlueprintReadWrite, Category = Gameplay)
+		TArray<class APlayerState*> playerStArr;
+
+	UFUNCTION()
+		void onRep_updateArr();
+
+	bool doOnce = false;
+
+protected:
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 };

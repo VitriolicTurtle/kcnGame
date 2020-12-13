@@ -53,17 +53,29 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "health")
 		void playerTakeDamage(float damage);
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "health")
+		bool playerIsDead;
+
 	UPROPERTY(ReplicatedUsing = onRep_Kill, BlueprintReadOnly, Category = Gameplay)//---------
 		AcasterCharacterBP* killer;
 
+	UPROPERTY(ReplicatedUsing = onRep_Win, BlueprintReadOnly, Category = Gameplay)
+		AcasterCharacterBP* winnerPl;
+
 	UFUNCTION()
 		void onRep_kill();
+
+	UFUNCTION()
+		void onRep_win();
 
 	UFUNCTION(BlueprintImplementableEvent)
 		void displayDeathScreen();
 
 	UFUNCTION()
 		void onRep_currentPlayerHP();
+
+	UFUNCTION(BlueprintImplementableEvent)
+		void displayVictoryScreen();
 
 protected:
 	// Called when the game starts or when spawned
