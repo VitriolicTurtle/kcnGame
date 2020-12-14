@@ -37,6 +37,7 @@ public:
 		void onRep_updateArr();
 
 	bool doOnce = false;
+	int numOfElements;
 
 protected:
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;

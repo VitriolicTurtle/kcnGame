@@ -16,6 +16,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "playerHUD.h"
+#include "casterCharacterBP.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -214,7 +215,7 @@ void AHumanCharacter::shoot() {
 
 void AHumanCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
-	DOREPLIFETIME(AHumanCharacter, killer);
+	DOREPLIFETIME(AHumanCharacter, killerHuman);
 	DOREPLIFETIME(AHumanCharacter, winnerPl);
 	DOREPLIFETIME(AHumanCharacter, currentPlayerHP);
 }

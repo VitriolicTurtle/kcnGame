@@ -69,7 +69,8 @@ public:
 		FVector MuzzleOffset;
 
 	UPROPERTY(ReplicatedUsing = onRep_Kill, BlueprintReadOnly, Category = Gameplay)
-		AHumanCharacter* killer;
+		//AHumanCharacter* killerHuman;
+		AActor* killerHuman;
 
 	UPROPERTY(ReplicatedUsing = onRep_Win, BlueprintReadOnly, Category = Gameplay)
 		AHumanCharacter* winnerPl;

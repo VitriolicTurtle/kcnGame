@@ -57,7 +57,8 @@ public:
 		bool playerIsDead;
 
 	UPROPERTY(ReplicatedUsing = onRep_Kill, BlueprintReadOnly, Category = Gameplay)//---------
-		AcasterCharacterBP* killer;
+		//AcasterCharacterBP* killerAlien;
+		AActor* killerAlien;
 
 	UPROPERTY(ReplicatedUsing = onRep_Win, BlueprintReadOnly, Category = Gameplay)
 		AcasterCharacterBP* winnerPl;

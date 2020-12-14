@@ -26,6 +26,7 @@ Abullet::Abullet()
 
 	SetReplicates(true);
 	SetReplicateMovement(true);
+	damageValue = 25.0f;
 
 }
 
@@ -49,31 +50,50 @@ void Abullet::FireInDirection(const FVector& ShootDirection) {
 
 void Abullet::onHit(UPrimitiveComponent* hitComp, AActor* otherActor, UPrimitiveComponent* otherComp, FVector normalImpulse, const FHitResult& hit) {
 	if (HasAuthority()) {
-		if (AHumanCharacter* playerHit = Cast<AHumanCharacter>(otherActor)) {
-			//playerHit->playerTakeDamage(25.0f);
-			if(playerHit != Cast<AHumanCharacter>(GetOwner())) playerHit->playerTakeDamage(25.0f);
-			if (playerHit->currentPlayerHP <= 0.0f) {
-				if (AffaGameMode* mode = Cast<AffaGameMode>(GetWorld()->GetAuthGameMode())) {
-					UE_LOG(LogTemp, Warning, TEXT("you are dead"));
-					AHumanCharacter* killer = Cast<AHumanCharacter>(GetOwner());
-					mode->playerKilled(playerHit, killer, nullptr, nullptr);
-					playerHit->killer = killer;
-					playerHit->onRep_kill();
-				}
-			}
-		}
-		/*else if (AcasterCharacterBP* playerHit2 = Cast<AcasterCharacterBP>(otherActor)) {
-			playerHit2->playerTakeDamage(25.0f);
-			if (playerHit2->currentPlayerHP <= 0.0f) {
-				if (AffaGameMode* mode2 = Cast<AffaGameMode>(GetWorld()->GetAuthGameMode())) {
-					UE_LOG(LogTemp, Warning, TEXT("you are dead"));
-					if (AcasterCharacterBP* killer2 = Cast<AcasterCharacterBP>(GetOwner())) {
-						mode2->playerKilled(nullptr, nullptr, playerHit2, killer2);
-						playerHit2->killer = killer2;
-						playerHit2->onRep_kill();
+			if (AHumanCharacter* playerHit = Cast<AHumanCharacter>(otherActor)) {
+				//playerHit->playerTakeDamage(25.0f);
+				if (playerHit != Cast<AHumanCharacter>(GetOwner())) playerHit->playerTakeDamage(damageValue);
+				if (playerHit->currentPlayerHP <= 0.0f) {
+					if (AffaGameMode* mode = Cast<AffaGameMode>(GetWorld()->GetAuthGameMode())) {
+						UE_LOG(LogTemp, Warning, TEXT("you are dead1"));
+						if (GetOwner()->IsA(AHumanCharacter::StaticClass())) {
+							UE_LOG(LogTemp, Warning, TEXT("prob in 1"));
+							AHumanCharacter* killer = Cast<AHumanCharacter>(GetOwner());
+							mode->playerKilled(playerHit, killer, nullptr, nullptr);
+							playerHit->killerHuman = killer;
+							playerHit->onRep_kill();
+						}
+						else if (GetOwner()->IsA(AcasterCharacterBP::StaticClass())) {
+							UE_LOG(LogTemp, Warning, TEXT("prob in 2"));
+							AcasterCharacterBP* killer = Cast<AcasterCharacterBP>(GetOwner());
+							mode->playerKilled(playerHit, nullptr, nullptr, killer);
+							playerHit->killerHuman = killer;//this-------------------------------------------------
+							playerHit->onRep_kill();
+						}
 					}
 				}
 			}
-		}*/
+			else if (AcasterCharacterBP* playerHitAli = Cast<AcasterCharacterBP>(otherActor)) {
+				if (playerHitAli != Cast<AcasterCharacterBP>(GetOwner())) playerHitAli->playerTakeDamage(damageValue);
+				if (playerHitAli->currentPlayerHP <= 0.0f) {
+					if (AffaGameMode* mode = Cast<AffaGameMode>(GetWorld()->GetAuthGameMode())) {
+						UE_LOG(LogTemp, Warning, TEXT("you are dead2"));
+						if (GetOwner()->IsA(AHumanCharacter::StaticClass())) {
+							UE_LOG(LogTemp, Warning, TEXT("prob in 3"));
+							AHumanCharacter* killer = Cast<AHumanCharacter>(GetOwner());
+							mode->playerKilled(nullptr, killer, playerHitAli, nullptr);							
+							playerHitAli->killerAlien = killer;//this----------------------------------------------
+							playerHitAli->onRep_kill();
+						}
+						else if (GetOwner()->IsA(AcasterCharacterBP::StaticClass())) {
+							UE_LOG(LogTemp, Warning, TEXT("prob in 4"));
+							AcasterCharacterBP* killer = Cast<AcasterCharacterBP>(GetOwner());
+							mode->playerKilled(nullptr, nullptr, playerHitAli, killer);
+							playerHitAli->killerAlien = killer;
+							playerHitAli->onRep_kill();
+						}
+					}
+				}
+			}
 	}
 }

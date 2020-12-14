@@ -27,40 +27,36 @@ void AffaGameMode::playerKilled(class AHumanCharacter* killed, class AHumanChara
 		UWorld* World = GetWorld();
 		playerStArr = World->GetGameState()->PlayerArray;
 		onRep_updateArr();
-		int NumberOfElements = 0;
-		NumberOfElements = playerStArr.Num();
-		UE_LOG(LogTemp, Warning, TEXT("player array:, %d"), NumberOfElements);
+		numOfElements = 0;
+		numOfElements = playerStArr.Num();
+		UE_LOG(LogTemp, Warning, TEXT("player array:, %d"), numOfElements);
 		doOnce = true;
 	}
 	if (killed) {
 		if (APlayerState* player = Cast<APlayerState>(killed->GetPlayerState())) {
-
 			playerStArr.RemoveSingle(player);
 			onRep_updateArr();
 		}
-		if (playerStArr.Num() == 1 && playerStArr.IsValidIndex(0)) {
-			winPlayer(Cast<AffaPlayerState>(playerStArr[0]));
-			killer->winnerPl = killer;
-			killer->onRep_win();
+	}
+	if (alienKilled) {
+		if (APlayerState* player = Cast<APlayerState>(alienKilled->GetPlayerState())) {
+			playerStArr.RemoveSingle(player);
+			onRep_updateArr();
 		}
 	}
-
-
-	/*if (killed) {
-		if (ASpellshooterPlayerController* player = Cast<ASpellshooterPlayerController>(killed->GetController())) {
-
-			playersAlive.RemoveSingle(player);
-		}
-		if (playersAlive.Num() == 1 && playersAlive.IsValidIndex(0)) {
-			winPlayer(Cast<AffaPlayerState>(playersAlive[0]->PlayerState));
-			killer->winnerPl = killer;
-			killer->onRep_win();
-		}
-	}*/
+	if (playerStArr.Num() == 1 && playerStArr.IsValidIndex(0) && killer) {
+		winPlayer(Cast<AffaPlayerState>(playerStArr[0]));
+		killer->winnerPl = killer;
+		killer->onRep_win();
+	}
+	if (playerStArr.Num() == 1 && playerStArr.IsValidIndex(0) && alienKiller) {
+		winPlayer(Cast<AffaPlayerState>(playerStArr[0]));
+		alienKiller->winnerPl = alienKiller;
+		alienKiller->onRep_win();
+	}
 }
 
-void AffaGameMode::winPlayer(class AffaPlayerState* winner)
-{
+void AffaGameMode::winPlayer(class AffaPlayerState* winner) {
 	if (AffaGameState* state = GetGameState<AffaGameState>()) {
 		state->winner = winner;
 	}
