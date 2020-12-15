@@ -63,6 +63,13 @@ public:
 	UPROPERTY(ReplicatedUsing = onRep_Win, BlueprintReadOnly, Category = Gameplay)
 		AcasterCharacterBP* winnerPl;
 
+	UPROPERTY(EditAnywhere, Category = "shooting")
+		TSubclassOf<class Abullet> BPbullet;
+
+	// Gun muzzle offset from the camera location.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Gameplay)
+		FVector MuzzleOffset;
+
 	UFUNCTION()
 		void onRep_kill();
 
@@ -92,7 +99,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 		float BaseLookUpAtRate;
-		
+
+	void shoot();
+
+	UFUNCTION(Server, Reliable)//, WithValidation)
+		void serverOnShoot();
+
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:	

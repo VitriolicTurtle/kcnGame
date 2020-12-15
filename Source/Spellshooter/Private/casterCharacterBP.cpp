@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Controller.h"
 #include "Components/InputComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "bullet.h"
@@ -101,7 +102,9 @@ void AcasterCharacterBP::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AcasterCharacterBP::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AcasterCharacterBP::MoveRight);
-
+	
+	// Shoot
+	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &AcasterCharacterBP::shoot);
 }
 
 float AcasterCharacterBP::getPlayerHP() {
@@ -150,5 +153,44 @@ void AcasterCharacterBP::onRep_kill() {
 void AcasterCharacterBP::onRep_win() {
 	if (IsLocallyControlled() && playerIsDead == false) {
 		displayVictoryScreen();
+	}
+}
+
+void AcasterCharacterBP::serverOnShoot_Implementation() {
+	shoot();
+}
+
+void AcasterCharacterBP::shoot() {
+	if (!HasAuthority()) {
+		serverOnShoot();
+	}
+	else {
+		// Get the camera transform.
+		FVector CameraLocation;
+		FRotator CameraRotation;
+		GetActorEyesViewPoint(CameraLocation, CameraRotation);
+
+		// Set MuzzleOffset to spawn projectiles slightly in front of the camera.
+		MuzzleOffset.Set(80.0f, 0.0f, 0.0f);
+
+		// Transform MuzzleOffset from camera space to world space.
+		FVector MuzzleLocation = CameraLocation + FTransform(CameraRotation).TransformVector(MuzzleOffset);
+
+		// Skew the aim to be slightly upwards.
+		FRotator MuzzleRotation = CameraRotation;
+		MuzzleRotation.Pitch += 0.0f;
+
+		UWorld* World = GetWorld();
+
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+		SpawnParams.Instigator = GetInstigator();
+
+		Abullet* bullet = World->SpawnActor<Abullet>(BPbullet, MuzzleLocation, MuzzleRotation, SpawnParams);
+
+		if (bullet) {
+			FVector LaunchDirection = MuzzleRotation.Vector();
+			bullet->FireInDirection(LaunchDirection);
+		}
 	}
 }
