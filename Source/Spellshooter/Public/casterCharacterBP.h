@@ -12,7 +12,7 @@ class UCameraComponent;
 class UStaticMeshComponent; //might be obsolete
 
 
-UCLASS()
+UCLASS(config = Game)
 class SPELLSHOOTER_API AcasterCharacterBP : public ACharacter
 {
 	GENERATED_BODY()
@@ -20,6 +20,9 @@ class SPELLSHOOTER_API AcasterCharacterBP : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AcasterCharacterBP();
+
+	UPROPERTY(BlueprintReadWrite, Category = "Shop")
+		AActor* playerWeapon = nullptr;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 		USpringArmComponent* SpringArmComp;

@@ -144,11 +144,11 @@ void AcasterCharacterBP::onRep_kill() {
 	if (IsLocallyControlled()) {
 		displayDeathScreen();
 	}
-	/*
+	
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetMesh()->SetSimulatePhysics(true);
 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
-	GetMesh()->SetCollisionResponseToAllChannels(ECR_Block);*/
+	GetMesh()->SetCollisionResponseToAllChannels(ECR_Block);
 	SetLifeSpan(05.0f);
 }
 
