@@ -22,17 +22,19 @@ AcasterCharacterBP::AcasterCharacterBP()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	SpringArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComp"));
-	SpringArmComp->SetupAttachment(RootComponent);   //this attaches SpringArmComp to the rootComponent which here is the capsule
+	//SpringArmComp = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComp"));
+	//SpringArmComp->SetupAttachment(RootComponent);   //this attaches SpringArmComp to the rootComponent which here is the capsule
 
-	CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
-	CameraComp->SetupAttachment(SpringArmComp);
+	//CameraComp = CreateDefaultSubobject<UCameraComponent>(TEXT("CameraComp"));
+	//CameraComp->SetupAttachment(SpringArmComp);
 
-	MeshComp = CreateAbstractDefaultSubobject<USkeletalMeshComponent>(TEXT("PlayerMesh"));
-	MeshComp->SetupAttachment(RootComponent);
+	//MeshComp = CreateAbstractDefaultSubobject<USkeletalMeshComponent>(TEXT("PlayerMesh"));
+	///MeshComp->SetupAttachment(RootComponent);
 
 	BaseTurnRate = 45.0f;
 	BaseLookUpAtRate = 45.0f;
+	bUseControllerRotationYaw = true;
+
 }
 
 // Called when the game starts or when spawned
