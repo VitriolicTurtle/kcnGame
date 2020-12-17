@@ -34,7 +34,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
 		float BaseLookUpRate;
 
-	UPROPERTY(EditAnywhere, Category = "shooting")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "shooting")
 		TSubclassOf<class Abullet> BPbullet;
 
 	// Player health

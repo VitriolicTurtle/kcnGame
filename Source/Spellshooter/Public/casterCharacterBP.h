@@ -66,7 +66,7 @@ public:
 	UPROPERTY(ReplicatedUsing = onRep_Win, BlueprintReadOnly, Category = Gameplay)
 		AcasterCharacterBP* winnerPl;
 
-	UPROPERTY(EditAnywhere, Category = "shooting")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "shooting")
 		TSubclassOf<class Abullet> BPbullet;
 
 	// Gun muzzle offset from the camera location.

@@ -18,4 +18,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Weapon)
 		TSubclassOf<AActor> weaponActor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "shooting")
+		TSubclassOf<class Abullet> BPbullet;
 };
