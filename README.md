@@ -16,9 +16,12 @@ Game name: Spellshooter
 
 # How to run:
  
-It is important to note that the server must be manually restarded when the game mode finishes finished i.e. when a player wins the game mode.  
+It is important to note that the server must be manually restarded when the game mode finishes i.e. when a player wins the game mode.  
 Executeable files for game and server provided in google drive.  
-Link: Todo
+Game: https://drive.google.com/file/d/1l8zfD6XNvAMluZA1Z6ADgM3W0rV2tlsy/view?usp=sharing  
+Server: https://drive.google.com/file/d/1uTCwMoHf7vcm8HzHuOw5mwY-15sYNFFu/view?usp=sharing  
+
+We highly recommend making a shortcut for the server executable and add -log to the end of the path in the properties section of the shortcut, this makes it easier to close the server and see debug messages.  
   
 **How to: Compile the game yourself**  
 It's recomended that you just download the executables with the provided links above, but if you want to do it yourself this is how.  
@@ -35,6 +38,7 @@ W = Move player forward
 A = Move player to the left  
 S = Move player backward  
 D = Move player to the right  
+Spacebar = Jump  
 
 Mouse to control aim  
 MouseLeftClick = Shoot  
