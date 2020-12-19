@@ -4,7 +4,7 @@
 	Theo Camille Gascogne              theocg           theocg@stud.ntnu.no       GithubID: iaminadequate          GitlabID: iaminadequate  
 	
 Video of the gameplay showing off the important parts of the game  
-Direct link to gameplay video: todo  
+Direct link to gameplay video: https://www.youtube.com/watch?v=sGTei1Su9AU  
 
 Video for showing off the **code** that is tightly integrated with the game engine that is difficult to see from the text of the programming  
 Direct link to code video: https://drive.google.com/file/d/1Fal30wCLYECyP797hIjye-b3Po-RVRSA/view?usp=sharing  
