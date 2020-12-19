@@ -54,3 +54,10 @@ Humans use normal guns for combat and the Martians use magical abilities.
 The game mode is Free For All, last man standing wins.
 
 # Sources
+AK-47 Asset   - https://drive.google.com/file//1TEHLeQG094UkoPOUgxlPx52ObJysXx23/view   
+ 
+M4-A1 Asset   - https://free3d.com/3d-model/csgo-m4a4--91075.html   
+
+Magic effects - https://www.unrealengine.com/marketplace/en-US/product/a36bac8b05004e999dd4b1d332501f49   
+
+Alien and Human model and animations - https://www.mixamo.com/#/   
